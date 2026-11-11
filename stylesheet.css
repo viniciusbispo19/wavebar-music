@@ -23,3 +23,107 @@
 .wavebar-paused .wavebar-equalizer {
     color: rgba(255, 255, 255, 0.75);
 }
+
+/* ---------- Popup / card ---------- */
+
+.wavebar-menu-content {
+    padding: 14px;
+    border-radius: 26px;
+    background-color: rgba(28, 28, 32, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.wavebar-card {
+    width: 300px;
+    spacing: 10px;
+    color: #ffffff;
+}
+
+.wavebar-cover {
+    width: 300px;
+    height: 300px;
+    border-radius: 18px;
+    background-size: cover;
+}
+
+/* Placeholder: degradê na cor de destaque + ícone de nota musical */
+.wavebar-cover.wavebar-no-cover {
+    background-gradient-direction: vertical;
+    background-gradient-start: st-transparentize(-st-accent-color, 0.35);
+    background-gradient-end: rgba(255, 255, 255, 0.04);
+}
+
+.wavebar-cover-placeholder {
+    icon-size: 96px;
+    color: rgba(255, 255, 255, 0.55);
+}
+
+.wavebar-info {
+    spacing: 2px;
+    padding: 4px 4px 0;
+}
+
+.wavebar-title {
+    font-size: 1.25em;
+    font-weight: 800;
+}
+
+.wavebar-artist {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* Linha do player: ‹  [ícone] Spotify  1/2  › */
+.wavebar-player-row {
+    spacing: 4px;
+}
+
+.wavebar-app-button {
+    padding: 4px 8px;
+    border-radius: 999px;
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 0.9em;
+}
+
+.wavebar-app-button:hover,
+.wavebar-app-button:focus {
+    background-color: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+}
+
+.wavebar-app-button StBoxLayout {
+    spacing: 6px;
+}
+
+.wavebar-app-icon {
+    icon-size: 16px;
+}
+
+.wavebar-player-count {
+    font-size: 0.8em;
+    font-feature-settings: "tnum";
+    color: rgba(255, 255, 255, 0.45);
+}
+
+.wavebar-icon-button {
+    border-radius: 999px;
+    padding: 6px;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.wavebar-icon-button:hover,
+.wavebar-icon-button:focus {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+}
+
+.wavebar-icon-button:active {
+    background-color: rgba(255, 255, 255, 0.18);
+}
+
+.wavebar-icon-button:insensitive {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.wavebar-switch StIcon {
+    icon-size: 14px;
+}
