@@ -6,11 +6,11 @@
 # O que verifica:
 #   - ativar/desativar N vezes (padrão 8) com o card ABERTO e letras sendo
 #     baixadas (parte dos ciclos desativa no meio da requisição);
-#   - nenhum ator Wavebar* sobra no palco; nenhum menu sobra no painel;
-#   - nenhum timer GLib criado pela Wavebar continua vivo após o disable()
+#   - nenhum ator WavebarMusic* sobra no palco; nenhum menu sobra no painel;
+#   - nenhum timer GLib criado pela Wavebar Music continua vivo após o disable()
 #     (o teste intercepta GLib.timeout_add/source_remove durante a execução);
 #   - bloquear a tela (modo unlock-dialog) desativa e desbloquear reativa;
-#   - nenhuma linha nova de erro/aviso no log vinda da Wavebar.
+#   - nenhuma linha nova de erro/aviso no log vinda da Wavebar Music.
 #
 # Uso: ./scripts/nested-test.sh [ciclos]
 
@@ -18,12 +18,12 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 CYCLES="${1:-8}"
-STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/wavebar"
+STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/wavebar-music"
 LOG=$(ls -t "$STATE_DIR"/nested-*.log | head -1)
 BEFORE=$(wc -l < "$LOG")
 
 # Dois players de teste (se ainda não estiverem rodando).
-for spec in "wavebar_fake" "wavebar_fake2 --identity Segundo --paused --track 1"; do
+for spec in "wavebar_music_fake" "wavebar_music_fake2 --identity Segundo --paused --track 1"; do
     name=${spec%% *}
     if ! ./scripts/nested-run.sh gdbus call --session -d org.freedesktop.DBus \
         -o /org/freedesktop/DBus -m org.freedesktop.DBus.NameHasOwner \
@@ -38,12 +38,12 @@ sleep 2
 EVAL_TIMEOUT=120 ./scripts/nested-eval.sh "(async () => {
   const {default: GLib} = await import('gi://GLib');
   const {default: Gio} = await import('gi://Gio');
-  const uuid = 'wavebar@vinicius', m = Main.extensionManager;
+  const uuid = 'wavebar-music@vinicius', m = Main.extensionManager;
   const wait = ms => new Promise(r => setTimeout(r, ms));
   const ind = () => Main.panel.statusArea[uuid];
 
-  // Conta atores cujas classes GObject registramos (GTypeName Wavebar*).
-  const countOurs = a => (a.constructor.\$gtype?.name?.startsWith('Wavebar') ? 1 : 0) +
+  // Conta atores cujas classes GObject registramos (GTypeName Wavebar Music*).
+  const countOurs = a => (a.constructor.\$gtype?.name?.startsWith('WavebarMusic') ? 1 : 0) +
     a.get_children().reduce((n, c) => n + countOurs(c), 0);
   const snap = () => ({
     estado: m.lookup(uuid).state,
@@ -54,7 +54,7 @@ EVAL_TIMEOUT=120 ./scripts/nested-eval.sh "(async () => {
   });
   // Apaga o cache de letras em disco para forçar requisições de rede.
   const clearLyrics = () => {
-    const dir = Gio.File.new_for_path(GLib.get_user_cache_dir() + '/wavebar/lyrics');
+    const dir = Gio.File.new_for_path(GLib.get_user_cache_dir() + '/wavebar-music/lyrics');
     try {
       const en = dir.enumerate_children('standard::name', 0, null);
       let info;
@@ -63,7 +63,7 @@ EVAL_TIMEOUT=120 ./scripts/nested-eval.sh "(async () => {
     } catch {}
   };
 
-  // Rastreia timers criados por código da Wavebar.
+  // Rastreia timers criados por código da Wavebar Music.
   const live = new Map();
   let created = 0;
   const origAdd = GLib.timeout_add, origRemove = GLib.source_remove;
@@ -122,11 +122,12 @@ except json.JSONDecodeError:
 print(json.dumps(data, indent=1, ensure_ascii=False))
 a, d, off = data["antes"], data["depois"], data["desativada"]
 checks = {
+    "contador viu atores WavebarMusic (teste válido)": a["atores"] > 0,
     "ativa e sem erro após os ciclos": d["estado"] == 1 and not d["erro"],
     "nenhum menu sobrando no painel": d["menus"] == a["menus"],
-    "nenhum ator Wavebar sobrando após os ciclos": d["atores"] == a["atores"],
-    "desativar remove todos os atores Wavebar": off["atores"] == 0 and not off["noPainel"],
-    "rastreador viu timers da Wavebar (teste válido)": off["timersCriados"] > 0,
+    "nenhum ator Wavebar Music sobrando após os ciclos": d["atores"] == a["atores"],
+    "desativar remove todos os atores Wavebar Music": off["atores"] == 0 and not off["noPainel"],
+    "rastreador viu timers da Wavebar Music (teste válido)": off["timersCriados"] > 0,
     "desativar não deixa timers vivos": off["timersVivos"] == [],
     "bloquear a tela desativa (sem atores)": data["bloqueada"]["atores"] == 0,
     "desbloquear reativa": data["desbloqueada"]["noPainel"] and data["desbloqueada"]["estado"] == 1,
@@ -136,23 +137,30 @@ for name, ok in checks.items():
 print("RESULTADO:", "OK" if all(checks.values()) else "FALHOU")
 '
 
-echo "--- avisos/erros novos no log vindos da Wavebar:"
+echo "--- avisos/erros novos no log vindos da Wavebar Music:"
 tail -n +$((BEFORE + 1)) "$LOG" | python3 -I -c '
 import re, sys
-blocks, cur = [], []
-for line in sys.stdin.read().splitlines():
-    if re.search(r"(CRITICAL|WARNING|ERROR) \*\*|JS ERROR|\[Wavebar\]", line):
+# Um bloco = linha de aviso/erro + a pilha que vem depois. O GNOME põe uma
+# linha em branco entre a mensagem e "Stack trace:", por isso a pilha é
+# reconhecida pelo formato (e não por "linhas não vazias seguidas").
+lines = sys.stdin.read().splitlines()
+blocks, cur = [], None
+for line in lines:
+    if re.search(r"(CRITICAL|WARNING|ERROR) \*\*|JS ERROR|\[Wavebar Music\]", line):
         if cur: blocks.append(cur)
         cur = [line]
-    elif cur and line.strip():
-        cur.append(line)
-    elif cur:
-        blocks.append(cur); cur = []
+    elif cur is not None and (line.startswith("Stack trace:") or line.startswith("  ")
+                              or re.match(r"^#\d+ ", line) or not line.strip()):
+        if line.strip():
+            cur.append(line)
+    elif cur is not None:
+        blocks.append(cur); cur = None
 if cur: blocks.append(cur)
-ours = [b for b in blocks if any("wavebar@" in l or "[Wavebar]" in l for l in b)]
+ours = [b for b in blocks if any("wavebar-music@" in l or "[Wavebar Music]" in l for l in b)]
 for b in ours:
     print("\n".join(b[:6])); print()
 if not ours:
     print("(nenhum)")
 print(f"(outros avisos novos no log, de outras extensões/do Shell: {len(blocks) - len(ours)})")
+sys.exit(1 if ours else 0)
 '

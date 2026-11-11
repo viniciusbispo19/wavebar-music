@@ -2,7 +2,7 @@
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 <!-- Copyright (C) 2026 Vinicius Bispo -->
 <schemalist>
-  <schema id="org.gnome.shell.extensions.wavebar" path="/org/gnome/shell/extensions/wavebar/">
+  <schema id="org.gnome.shell.extensions.wavebar-music" path="/org/gnome/shell/extensions/wavebar-music/">
     <key name="theme" type="s">
       <choices>
         <choice value="auto"/>

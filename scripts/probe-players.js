@@ -28,9 +28,9 @@ const wait = ms => new Promise(r => GLib.timeout_add(GLib.PRIORITY_DEFAULT, ms, 
     return GLib.SOURCE_REMOVE;
 }));
 
-// Cache temporário: o diagnóstico não suja ~/.cache/wavebar.
-const tmpCache = GLib.dir_make_tmp('wavebar-probe-XXXXXX');
-const session = new Soup.Session({user_agent: 'Wavebar/0.1 (GNOME Shell extension)', timeout: 15});
+// Cache temporário: o diagnóstico não suja ~/.cache/wavebar-music.
+const tmpCache = GLib.dir_make_tmp('wavebar-music-probe-XXXXXX');
+const session = new Soup.Session({user_agent: 'WavebarMusic/0.3 (GNOME Shell extension)', timeout: 15});
 const covers = new CoverArtLoader(session, tmpCache);
 const lyrics = new LyricsClient(session, tmpCache);
 const manager = new MprisManager();
@@ -59,7 +59,7 @@ async function main() {
         print(`  duração: ${(md.length / 1e6).toFixed(1)} s | trackId: ${md.trackId || '—'}`);
         print(`  pode: play=${p.canPlay} pause=${p.canPause} seek=${p.canSeek} next=${p.canGoNext} prev=${p.canGoPrevious}`);
         if (!p.isActive) {
-            print('  (inativo: a Wavebar ignora)\n');
+            print('  (inativo: a Wavebar Music ignora)\n');
             continue;
         }
 

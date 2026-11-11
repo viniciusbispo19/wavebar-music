@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2026 Vinicius Bispo
 # Abre um GNOME Shell 51 "aninhado" (numa janela do mutter-devkit), já com a
-# Wavebar instalada e ativada.
+# Wavebar Music instalada e ativada.
 #
 # Uso:
 #   ./scripts/dev-nested.sh              # janela 1600x1000
@@ -12,7 +12,7 @@
 # Isolamento:
 #   - dbus-run-session cria um D-Bus só desse Shell. Players da sua sessão real
 #     NÃO aparecem lá dentro: use scripts/fake-player.js (ou nested-run.sh).
-#   - O dconf é uma CÓPIA (~/.config/dconf/wavebar_dev, via DCONF_PROFILE):
+#   - O dconf é uma CÓPIA (~/.config/dconf/wavebar_music_dev, via DCONF_PROFILE):
 #     mesmo tema e extensões, mas nada que mude lá dentro vaza para cá.
 #     A cópia e as escritas acontecem DENTRO do barramento aninhado, porque cada
 #     barramento tem seu próprio dconf-service e eles se sobrescreveriam.
@@ -21,11 +21,11 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 SIZE="${1:-1600x1000}"
-UUID=wavebar@vinicius
-DEVTOOLS_UUID=wavebar-devtools@vinicius
-DEV_DB=wavebar_dev  # sem hífen: vira parte de um caminho D-Bus
+UUID=wavebar-music@vinicius
+DEVTOOLS_UUID=wavebar-music-devtools@vinicius
+DEV_DB=wavebar_music_dev  # sem hífen: vira parte de um caminho D-Bus
 
-STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/wavebar"
+STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/wavebar-music"
 mkdir -p "$STATE_DIR"
 LOG="$STATE_DIR/nested-$(date +%Y%m%d-%H%M%S).log"
 BUS_FILE="$STATE_DIR/nested-bus"
@@ -40,7 +40,7 @@ gnome-extensions install --force "build/$DEVTOOLS_UUID.shell-extension.zip"
 printf 'user-db:%s\n' "$DEV_DB" > "$STATE_DIR/dconf-profile"
 export DCONF_PROFILE="$STATE_DIR/dconf-profile"
 export DCONF_DIR DEV_DB UUID DEVTOOLS_UUID
-export WAVEBAR_DEV=1                       # libera o modo inseguro (devtools)
+export WAVEBAR_MUSIC_DEV=1                       # libera o modo inseguro (devtools)
 export SHELL_DEBUG=backtrace-warnings      # avisos vêm com a pilha JS
 
 if [ "${HEADLESS:-0}" = 1 ]; then

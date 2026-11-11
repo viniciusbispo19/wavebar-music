@@ -15,5 +15,5 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 ./scripts/build.sh
-gnome-extensions install --force build/wavebar@vinicius.shell-extension.zip
-echo "Instalado em ~/.local/share/gnome-shell/extensions/wavebar@vinicius"
+gnome-extensions install --force build/wavebar-music@vinicius.shell-extension.zip
+echo "Instalado em ~/.local/share/gnome-shell/extensions/wavebar-music@vinicius"

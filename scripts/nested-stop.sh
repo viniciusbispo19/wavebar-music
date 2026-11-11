@@ -5,7 +5,7 @@
 # Procura só processos chamados exatamente "gnome-shell" com --devkit ou
 # --headless nos argumentos — nunca o Shell da sua sessão real.
 
-BUS_FILE="${XDG_STATE_HOME:-$HOME/.local/state}/wavebar/nested-bus"
+BUS_FILE="${XDG_STATE_HOME:-$HOME/.local/state}/wavebar-music/nested-bus"
 
 for pid in $(pgrep -x gnome-shell); do
     if tr '\0' ' ' < "/proc/$pid/cmdline" | grep -qE -- '--devkit|--headless'; then

@@ -1,15 +1,15 @@
 /* SPDX-License-Identifier: GPL-3.0-or-later
  * Copyright (C) 2026 Vinicius Bispo
  *
- * Wavebar — todas as classes usam o prefixo .wavebar- para não vazar no tema.
+ * Wavebar Music — todas as classes usam o prefixo .wavebar-music- para não vazar no tema.
  *
  * Temas: as cores do tema ESCURO são o padrão; o CLARO sobrescreve dentro de
- * .wavebar-theme-light (classe posta no fundo do menu pelo panelIndicator.js).
+ * .wavebar-music-theme-light (classe posta no fundo do menu pelo panelIndicator.js).
  */
 
 /* ---------- Botão do painel ---------- */
 
-.wavebar-pill {
+.wavebar-music-pill {
     border-radius: 999px;
     padding: 4px 9px;
     /* Cor de destaque do sistema, translúcida */
@@ -17,19 +17,19 @@
     transition-duration: 200ms;
 }
 
-.wavebar-pill.wavebar-paused {
+.wavebar-music-pill.wavebar-music-paused {
     /* Cinza neutro: funciona no painel escuro e no transparente do Blur my Shell */
     background-color: rgba(127, 127, 127, 0.28);
 }
 
 /* A cor das barrinhas é herdada do texto do painel (ex.: o Blur my Shell
    pode deixar o painel transparente com texto claro ou escuro). */
-.wavebar-equalizer {
+.wavebar-music-equalizer {
     width: 13px;
     height: 12px;
 }
 
-.wavebar-paused .wavebar-equalizer {
+.wavebar-music-paused .wavebar-music-equalizer {
     opacity: 0.8;
 }
 
@@ -39,45 +39,45 @@
  *  2. Tema escolhido (ou sem BMS): pintamos o fundo. O BMS usa !important;
  *     usamos também, e os nossos seletores (3–4 classes) são mais
  *     específicos que os dele (2), então vencem quando o tema é forçado.
- *  3. Com desfoque por trás (.wavebar-over-blur), o nosso fundo fica translúcido.
+ *  3. Com desfoque por trás (.wavebar-music-over-blur), o nosso fundo fica translúcido.
  */
 
-.wavebar-menu-content {
+.wavebar-music-menu-content {
     padding: 14px;
     border-radius: 26px;
 }
 
-.popup-menu-content.wavebar-menu-content.wavebar-bg-dark {
+.popup-menu-content.wavebar-music-menu-content.wavebar-music-bg-dark {
     background-color: rgba(28, 28, 32, 0.95) !important;
     border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.popup-menu-content.wavebar-menu-content.wavebar-bg-light {
+.popup-menu-content.wavebar-music-menu-content.wavebar-music-bg-light {
     background-color: rgba(250, 250, 252, 0.96) !important;
     border: 1px solid rgba(0, 0, 0, 0.08);
 }
 
-.popup-menu-content.wavebar-menu-content.wavebar-bg-dark.wavebar-over-blur {
+.popup-menu-content.wavebar-music-menu-content.wavebar-music-bg-dark.wavebar-music-over-blur {
     background-color: rgba(18, 18, 22, 0.5) !important;
 }
 
-.popup-menu-content.wavebar-menu-content.wavebar-bg-light.wavebar-over-blur {
+.popup-menu-content.wavebar-music-menu-content.wavebar-music-bg-light.wavebar-music-over-blur {
     background-color: rgba(255, 255, 255, 0.55) !important;
 }
 
 /* ---------- Card ---------- */
 
-.wavebar-card {
+.wavebar-music-card {
     width: 300px;
     spacing: 10px;
     color: #ffffff;
 }
 
-.wavebar-theme-light .wavebar-card {
+.wavebar-music-theme-light .wavebar-music-card {
     color: #1c1c20;
 }
 
-.wavebar-cover {
+.wavebar-music-cover {
     width: 300px;
     height: 300px;
     border-radius: 12px; /* o card ajusta para ficar concêntrico com o menu */
@@ -85,256 +85,280 @@
 }
 
 /* Placeholder: degradê na cor de destaque + ícone de nota musical */
-.wavebar-cover.wavebar-no-cover {
+.wavebar-music-cover.wavebar-music-no-cover {
     background-gradient-direction: vertical;
     background-gradient-start: st-transparentize(-st-accent-color, 0.35);
     background-gradient-end: rgba(127, 127, 127, 0.08);
 }
 
-.wavebar-cover-placeholder {
+.wavebar-music-cover-placeholder {
     icon-size: 96px;
     color: rgba(255, 255, 255, 0.6);
 }
 
-.wavebar-theme-light .wavebar-cover-placeholder {
+.wavebar-music-theme-light .wavebar-music-cover-placeholder {
     color: rgba(255, 255, 255, 0.9);
 }
 
-.wavebar-info {
+.wavebar-music-info {
     spacing: 2px;
     padding: 4px 4px 0;
 }
 
-.wavebar-title {
+.wavebar-music-title {
     font-size: 1.25em;
     font-weight: 800;
 }
 
-.wavebar-artist {
+.wavebar-music-artist {
     color: rgba(255, 255, 255, 0.7);
 }
 
-.wavebar-theme-light .wavebar-artist {
+.wavebar-music-theme-light .wavebar-music-artist {
     color: rgba(0, 0, 0, 0.6);
 }
 
 /* Linha do player: ‹  [ícone] Spotify  1/2  › */
-.wavebar-player-row {
+.wavebar-music-player-row {
     spacing: 4px;
 }
 
-.wavebar-app-button {
+.wavebar-music-app-button {
     padding: 4px 8px;
     border-radius: 999px;
     color: rgba(255, 255, 255, 0.75);
     font-size: 0.9em;
 }
 
-.wavebar-app-button:hover,
-.wavebar-app-button:focus {
+.wavebar-music-app-button:hover,
+.wavebar-music-app-button:focus {
     background-color: rgba(255, 255, 255, 0.08);
     color: #ffffff;
 }
 
-.wavebar-theme-light .wavebar-app-button {
+.wavebar-music-theme-light .wavebar-music-app-button {
     color: rgba(0, 0, 0, 0.7);
 }
 
-.wavebar-theme-light .wavebar-app-button:hover,
-.wavebar-theme-light .wavebar-app-button:focus {
+.wavebar-music-theme-light .wavebar-music-app-button:hover,
+.wavebar-music-theme-light .wavebar-music-app-button:focus {
     background-color: rgba(0, 0, 0, 0.06);
     color: #1c1c20;
 }
 
-.wavebar-app-button StBoxLayout {
+.wavebar-music-app-button StBoxLayout {
     spacing: 6px;
 }
 
-.wavebar-app-icon {
+.wavebar-music-app-icon {
     icon-size: 16px;
 }
 
-.wavebar-player-count {
+.wavebar-music-player-count {
     font-size: 0.8em;
     font-feature-settings: "tnum";
     color: rgba(255, 255, 255, 0.45);
 }
 
-.wavebar-theme-light .wavebar-player-count {
+.wavebar-music-theme-light .wavebar-music-player-count {
     color: rgba(0, 0, 0, 0.45);
 }
 
-.wavebar-icon-button {
+.wavebar-music-icon-button {
     border-radius: 999px;
     padding: 6px;
     color: rgba(255, 255, 255, 0.85);
 }
 
-.wavebar-icon-button:hover,
-.wavebar-icon-button:focus {
+.wavebar-music-icon-button:hover,
+.wavebar-music-icon-button:focus {
     background-color: rgba(255, 255, 255, 0.1);
     color: #ffffff;
 }
 
-.wavebar-icon-button:active {
+.wavebar-music-icon-button:active {
     background-color: rgba(255, 255, 255, 0.18);
 }
 
-.wavebar-icon-button:insensitive {
+.wavebar-music-icon-button:insensitive {
     color: rgba(255, 255, 255, 0.3);
 }
 
-.wavebar-theme-light .wavebar-icon-button {
+.wavebar-music-theme-light .wavebar-music-icon-button {
     color: rgba(0, 0, 0, 0.75);
 }
 
-.wavebar-theme-light .wavebar-icon-button:hover,
-.wavebar-theme-light .wavebar-icon-button:focus {
+.wavebar-music-theme-light .wavebar-music-icon-button:hover,
+.wavebar-music-theme-light .wavebar-music-icon-button:focus {
     background-color: rgba(0, 0, 0, 0.07);
     color: #1c1c20;
 }
 
-.wavebar-theme-light .wavebar-icon-button:active {
+.wavebar-music-theme-light .wavebar-music-icon-button:active {
     background-color: rgba(0, 0, 0, 0.13);
 }
 
-.wavebar-theme-light .wavebar-icon-button:insensitive {
+.wavebar-music-theme-light .wavebar-music-icon-button:insensitive {
     color: rgba(0, 0, 0, 0.3);
 }
 
-.wavebar-switch StIcon {
+.wavebar-music-switch StIcon {
     icon-size: 14px;
 }
 
 /* ---------- Letras ---------- */
 
-.wavebar-lyrics {
+.wavebar-music-lyrics {
     height: 120px;
     -st-vfade-offset: 28px;   /* esmaece o topo e a base da rolagem */
 }
 
-.wavebar-lyrics-box {
+.wavebar-music-lyrics-box {
     spacing: 6px;
     padding: 4px 4px 32px;
 }
 
-.wavebar-lyric-line {
+.wavebar-music-lyric-line {
     font-weight: 700;
     color: rgba(255, 255, 255, 0.35);
 }
 
-.wavebar-lyric-line.wavebar-active {
+.wavebar-music-lyric-line.wavebar-music-active {
     color: #ffffff;
 }
 
-.wavebar-lyric-plain {
+.wavebar-music-lyric-plain {
     color: rgba(255, 255, 255, 0.8);
 }
 
-.wavebar-lyrics-status {
+.wavebar-music-lyrics-status {
     padding: 14px 8px;
     text-align: center;
     color: rgba(255, 255, 255, 0.5);
     font-style: italic;
 }
 
-.wavebar-theme-light .wavebar-lyric-line {
+.wavebar-music-theme-light .wavebar-music-lyric-line {
     color: rgba(0, 0, 0, 0.32);
 }
 
-.wavebar-theme-light .wavebar-lyric-line.wavebar-active {
+.wavebar-music-theme-light .wavebar-music-lyric-line.wavebar-music-active {
     color: #1c1c20;
 }
 
-.wavebar-theme-light .wavebar-lyric-plain {
+.wavebar-music-theme-light .wavebar-music-lyric-plain {
     color: rgba(0, 0, 0, 0.78);
 }
 
-.wavebar-theme-light .wavebar-lyrics-status {
+.wavebar-music-theme-light .wavebar-music-lyrics-status {
     color: rgba(0, 0, 0, 0.5);
 }
 
 /* ---------- Onda de progresso ---------- */
 
-.wavebar-progress {
+.wavebar-music-progress {
     spacing: 4px;
     padding-top: 2px;
 }
 
-.wavebar-waveform {
+.wavebar-music-waveform {
     height: 36px;
     color: -st-accent-color;                          /* parte já tocada */
-    -wavebar-rest-color: rgba(255, 255, 255, 0.22);   /* parte restante */
+    -wavebar-music-rest-color: rgba(255, 255, 255, 0.22);   /* parte restante */
 }
 
-.wavebar-waveform:hover {
-    -wavebar-rest-color: rgba(255, 255, 255, 0.32);
+.wavebar-music-waveform:hover {
+    -wavebar-music-rest-color: rgba(255, 255, 255, 0.32);
 }
 
-.wavebar-waveform:insensitive {
+.wavebar-music-waveform:insensitive {
     color: rgba(255, 255, 255, 0.45);
 }
 
-.wavebar-theme-light .wavebar-waveform {
-    -wavebar-rest-color: rgba(0, 0, 0, 0.16);
+.wavebar-music-theme-light .wavebar-music-waveform {
+    -wavebar-music-rest-color: rgba(0, 0, 0, 0.16);
 }
 
-.wavebar-theme-light .wavebar-waveform:hover {
-    -wavebar-rest-color: rgba(0, 0, 0, 0.26);
+.wavebar-music-theme-light .wavebar-music-waveform:hover {
+    -wavebar-music-rest-color: rgba(0, 0, 0, 0.26);
 }
 
-.wavebar-theme-light .wavebar-waveform:insensitive {
+.wavebar-music-theme-light .wavebar-music-waveform:insensitive {
     color: rgba(0, 0, 0, 0.4);
 }
 
-.wavebar-time {
+.wavebar-music-time {
     font-size: 0.8em;
     font-feature-settings: "tnum";
     color: rgba(255, 255, 255, 0.6);
 }
 
-.wavebar-theme-light .wavebar-time {
+.wavebar-music-theme-light .wavebar-music-time {
     color: rgba(0, 0, 0, 0.55);
 }
 
 /* ---------- Controles ---------- */
 
-.wavebar-controls {
+.wavebar-music-controls {
     spacing: 18px;
     padding-top: 2px;
 }
 
-.wavebar-control {
+.wavebar-music-control {
     padding: 10px;
 }
 
-.wavebar-control StIcon {
+.wavebar-music-control StIcon {
     icon-size: 20px;
 }
 
-.wavebar-control.wavebar-play {
+.wavebar-music-control.wavebar-music-play {
     padding: 14px;
     background-color: #ffffff;
     color: #1c1c20;
 }
 
-.wavebar-control.wavebar-play:hover,
-.wavebar-control.wavebar-play:focus {
+.wavebar-music-control.wavebar-music-play:hover,
+.wavebar-music-control.wavebar-music-play:focus {
     background-color: rgba(255, 255, 255, 0.88);
     color: #1c1c20;
 }
 
-.wavebar-theme-light .wavebar-control.wavebar-play {
+.wavebar-music-theme-light .wavebar-music-control.wavebar-music-play {
     background-color: #1c1c20;
     color: #ffffff;
 }
 
-.wavebar-theme-light .wavebar-control.wavebar-play:hover,
-.wavebar-theme-light .wavebar-control.wavebar-play:focus {
+.wavebar-music-theme-light .wavebar-music-control.wavebar-music-play:hover,
+.wavebar-music-theme-light .wavebar-music-control.wavebar-music-play:focus {
     background-color: rgba(28, 28, 32, 0.85);
     color: #ffffff;
 }
 
-.wavebar-control.wavebar-play StIcon {
+.wavebar-music-control.wavebar-music-play StIcon {
     icon-size: 22px;
+}
+
+/* Repetir: apagado quando desligado, cor de destaque quando ligado. */
+.wavebar-music-control.wavebar-music-repeat {
+    width: 18px;   /* mesmo tamanho do espaço à esquerda (centraliza o play) */
+    height: 18px;
+    padding: 9px;
+}
+
+.wavebar-music-control.wavebar-music-repeat StIcon {
+    icon-size: 18px;
+    color: rgba(255, 255, 255, 0.45);
+}
+
+.wavebar-music-control.wavebar-music-repeat:checked StIcon {
+    color: -st-accent-color;
+}
+
+.wavebar-music-theme-light .wavebar-music-control.wavebar-music-repeat StIcon {
+    color: rgba(0, 0, 0, 0.4);
+}
+
+.wavebar-music-theme-light .wavebar-music-control.wavebar-music-repeat:checked StIcon {
+    color: -st-accent-color;
 }

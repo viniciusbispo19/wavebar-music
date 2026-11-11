@@ -15,6 +15,6 @@ gnome-extensions pack --force --out-dir=build \
     --extra-source=lib \
     --extra-source=README.md \
     --extra-source=LICENSE \
-    --schema=schemas/org.gnome.shell.extensions.wavebar.gschema.xml \
+    --schema=schemas/org.gnome.shell.extensions.wavebar-music.gschema.xml \
     .
-echo "Pacote: build/wavebar@vinicius.shell-extension.zip"
+echo "Pacote: build/wavebar-music@vinicius.shell-extension.zip"

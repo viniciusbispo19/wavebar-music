@@ -5,12 +5,12 @@
 # termina quando o Shell NOVO responder pelo D-Bus.
 # Ciclo típico: ./scripts/nested-restart.sh && ./scripts/nested-test.sh
 # BRIDGE=1 também liga a ponte MPRIS (players reais dentro da sessão de teste).
-# Saída do dev-nested.sh: ~/.local/state/wavebar/nested-run.out
+# Saída do dev-nested.sh: ~/.local/state/wavebar-music/nested-run.out
 
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/wavebar"
+STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/wavebar-music"
 mkdir -p "$STATE_DIR"
 
 ./scripts/nested-stop.sh

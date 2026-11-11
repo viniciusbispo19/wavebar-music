@@ -5,7 +5,7 @@
 // PONTE MPRIS: espelha os players da sua sessão real (Spotify, Deezer,
 // navegadores…) dentro do D-Bus da sessão aninhada de testes.
 //
-// Por quê: a sessão aninhada tem um D-Bus só dela, então a Wavebar de teste
+// Por quê: a sessão aninhada tem um D-Bus só dela, então a Wavebar Music de teste
 // não enxerga seus players. A ponte publica, para cada player real, um objeto
 // com o MESMO nome no barramento aninhado e repassa tudo "cru":
 //   - leitura de propriedades (Get/GetAll) → lidas na hora do player real;
@@ -62,7 +62,7 @@ const XML = `<node>
 </node>`;
 const NODE = Gio.DBusNodeInfo.new_for_xml(XML);
 
-const stateDir = GLib.build_filenamev([GLib.get_user_state_dir(), 'wavebar']);
+const stateDir = GLib.build_filenamev([GLib.get_user_state_dir(), 'wavebar-music']);
 const [, busBytes] = GLib.file_get_contents(GLib.build_filenamev([stateDir, 'nested-bus']));
 const nestedAddress = new TextDecoder().decode(busBytes).trim().split('#')[0];
 

@@ -13,7 +13,7 @@
 //       --album '2014 Forest Hills Drive' --length 292 --art https://…/500x500.jpg
 //
 // Controle pelo terminal (exemplos):
-//   ./scripts/nested-run.sh gdbus call --session -d org.mpris.MediaPlayer2.wavebar_fake \
+//   ./scripts/nested-run.sh gdbus call --session -d org.mpris.MediaPlayer2.wavebar_music_fake \
 //       -o /org/mpris/MediaPlayer2 -m org.mpris.MediaPlayer2.Player.PlayPause
 
 import Cairo from 'cairo';
@@ -22,7 +22,7 @@ import GLib from 'gi://GLib';
 import System from 'system';
 
 // ---------- argumentos ----------
-const opts = {name: 'wavebar_fake', identity: 'Fake Player', desktopEntry: '', paused: false, track: 0, custom: {}};
+const opts = {name: 'wavebar_music_fake', identity: 'Fake Player', desktopEntry: '', paused: false, track: 0, custom: {}};
 for (let i = 0; i < System.programArgs.length; i++) {
     const arg = System.programArgs[i];
     const next = () => System.programArgs[++i];
@@ -56,7 +56,7 @@ function makeCover(path, [r1, g1, b1], [r2, g2, b2]) {
     surface.writeToPNG(path);
 }
 
-const tmpDir = GLib.build_filenamev([GLib.get_user_runtime_dir(), 'wavebar-fake']);
+const tmpDir = GLib.build_filenamev([GLib.get_user_runtime_dir(), 'wavebar-music-fake']);
 GLib.mkdir_with_parents(tmpDir, 0o700);
 const filePng = GLib.build_filenamev([tmpDir, `cover-${opts.name}.png`]);
 const dataPng = GLib.build_filenamev([tmpDir, `data-${opts.name}.png`]);
@@ -69,8 +69,8 @@ const TRACKS = [
     {title: 'Bohemian Rhapsody', artist: ['Queen'], album: 'A Night at the Opera',
         length: 354, art: GLib.filename_to_uri(filePng, null)},
     {title: 'Never Gonna Give You Up', artist: ['Rick Astley'], album: 'Whenever You Need Somebody',
-        length: 213, art: 'https://picsum.photos/seed/wavebar/400'},
-    {title: 'Faixa Que Não Existe', artist: ['Wavebar Teste'], album: 'Sem Letra',
+        length: 213, art: 'https://picsum.photos/seed/wavebar-music/400'},
+    {title: 'Faixa Que Não Existe', artist: ['Wavebar Music Teste'], album: 'Sem Letra',
         length: 95, art: dataUri},
     // Instrumental no LRCLIB e sem capa (testa o placeholder).
     {title: 'Time', artist: ['Hans Zimmer'], album: 'Inception', length: 276, art: ''},
@@ -85,6 +85,7 @@ if (Object.keys(opts.custom).length > 0) {
 // ---------- estado ----------
 let index = Math.min(Math.max(opts.track, 0), TRACKS.length - 1);
 let status = opts.paused ? 'Paused' : 'Playing';
+let loopStatus = 'None';
 let basePos = 0; // µs
 let baseTime = GLib.get_monotonic_time();
 
@@ -97,7 +98,7 @@ const setPos = p => {
     basePos = p;
     baseTime = GLib.get_monotonic_time();
 };
-const trackId = () => `/org/wavebar/fake/track${index}`;
+const trackId = () => `/org/wavebar_music/fake/track${index}`;
 
 function metadata() {
     const t = TRACKS[index];
@@ -134,6 +135,7 @@ const PLAYER_XML = `<node><interface name="org.mpris.MediaPlayer2.Player">
   <method name="OpenUri"><arg direction="in" name="Uri" type="s"/></method>
   <signal name="Seeked"><arg name="Position" type="x"/></signal>
   <property name="PlaybackStatus" type="s" access="read"/>
+  <property name="LoopStatus" type="s" access="readwrite"/>
   <property name="Rate" type="d" access="read"/>
   <property name="Metadata" type="a{sv}" access="read"/>
   <property name="Volume" type="d" access="read"/>
@@ -165,6 +167,7 @@ function notify(...props) {
     for (const p of props) {
         const value = {
             PlaybackStatus: new GLib.Variant('s', status),
+            LoopStatus: new GLib.Variant('s', loopStatus),
             Metadata: new GLib.Variant('a{sv}', metadata()),
         }[p];
         playerExport.emit_property_changed(p, value);
@@ -188,6 +191,15 @@ function setStatus(s) {
 const player = {
     get PlaybackStatus() {
         return status;
+    },
+    get LoopStatus() {
+        return loopStatus;
+    },
+    // Chamado quando alguém faz Properties.Set (ex.: o botão "repetir" do card).
+    set LoopStatus(value) {
+        loopStatus = value;
+        notify('LoopStatus');
+        print(`↻ repetir: ${value}`);
     },
     get Metadata() {
         return metadata();
@@ -226,8 +238,14 @@ playerExport.export(Gio.DBus.session, '/org/mpris/MediaPlayer2');
 // Fim da faixa → próxima (como um player de verdade).
 GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 1, () => {
     const len = TRACKS[index].length * 1e6;
-    if (status === 'Playing' && len > 0 && position() >= len)
-        changeTrack(1);
+    if (status === 'Playing' && len > 0 && position() >= len) {
+        if (loopStatus === 'Track') {
+            setPos(0);
+            playerExport.emit_signal('Seeked', new GLib.Variant('(x)', [0]));
+        } else {
+            changeTrack(1);
+        }
+    }
     return GLib.SOURCE_CONTINUE;
 });
 

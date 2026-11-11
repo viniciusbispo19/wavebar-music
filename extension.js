@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2026 Vinicius Bispo
-// Wavebar — controle de mídia universal (MPRIS) para o painel do GNOME Shell.
+// Wavebar Music — controle de mídia universal (MPRIS) para o painel do GNOME Shell.
 //
 // Este arquivo só monta e desmonta as peças. Toda a lógica vive em lib/:
 //   mpris.js          → descobre players no D-Bus e lê metadados
@@ -21,16 +21,16 @@ import {lookupPlayerApp} from './lib/appLookup.js';
 import {CoverArtLoader} from './lib/coverArt.js';
 import {LyricsClient} from './lib/lyrics.js';
 import {MprisManager} from './lib/mpris.js';
-import {WavebarIndicator} from './lib/panelIndicator.js';
+import {WavebarMusicIndicator} from './lib/panelIndicator.js';
 
 // User-Agent genérico: identifica o app sem expor dados do usuário.
-const USER_AGENT = 'Wavebar/0.1 (GNOME Shell extension)';
+const USER_AGENT = 'WavebarMusic/0.3 (GNOME Shell extension)';
 
-export default class WavebarExtension extends Extension {
+export default class WavebarMusicExtension extends Extension {
     enable() {
         // Nada é criado no construtor: as regras do extensions.gnome.org
         // exigem que tudo nasça no enable() e morra no disable().
-        const cacheDir = GLib.build_filenamev([GLib.get_user_cache_dir(), 'wavebar']);
+        const cacheDir = GLib.build_filenamev([GLib.get_user_cache_dir(), 'wavebar-music']);
 
         // Uma única sessão HTTP para capas e letras (reaproveita conexões).
         this._session = new Soup.Session({user_agent: USER_AGENT, timeout: 15});
@@ -42,7 +42,7 @@ export default class WavebarExtension extends Extension {
         };
 
         this._manager = new MprisManager(lookupPlayerApp);
-        this._indicator = new WavebarIndicator(this._manager, this._services);
+        this._indicator = new WavebarMusicIndicator(this._manager, this._services);
         Main.panel.addToStatusArea(this.uuid, this._indicator);
         this._manager.start();
     }

@@ -1,10 +1,12 @@
-# Wavebar
+# Wavebar Music
 
 Controle de mídia universal para o painel do GNOME Shell 51.
 
 - Funciona com **qualquer player MPRIS**. Foi testada com Spotify, Deezer, YouTube Music Desktop, Firefox, Brave, Vivaldi (e outros navegadores Chromium) e VLC.
 - Ícone em forma de **pílula com 3 barrinhas** que animam enquanto algo toca. Ele só aparece quando há um player ativo.
-- O card abre ao clicar no ícone e mostra a capa, o título, o artista, o player, a **letra com rolagem automática** e a **onda de progresso** (clique ou arraste para pular), além dos controles.
+- **Clique esquerdo** no ícone: pausa o que estiver tocando, em qualquer player (se houver vários tocando, pausa todos). Se nada estiver tocando, retoma o último player usado.
+- **Clique direito** no ícone (ou Enter/Espaço com o ícone focado): abre o card com a capa, o título, o artista, o player, a **letra com rolagem automática**, a **onda de progresso** (clique ou arraste para pular) e os controles.
+- Botão **Repetir** no card, que alterna entre não repetir, repetir a lista e repetir a música. Ele aparece quando o player oferece essa opção: Spotify, Deezer e VLC têm; navegadores não.
 - **Tema claro e escuro**, com integração ao **Blur my Shell**.
 - Com vários players, use as setas ao lado do nome do player para alternar. Clicar no nome traz a janela do player para a frente.
 
@@ -16,18 +18,18 @@ As letras vêm do [LRCLIB](https://lrclib.net).
 ./scripts/install.sh
 ```
 
-Isso empacota a extensão com `gnome-extensions pack` e a instala em `~/.local/share/gnome-shell/extensions/wavebar@vinicius/`.
+Isso empacota a extensão com `gnome-extensions pack` e a instala em `~/.local/share/gnome-shell/extensions/wavebar-music@vinicius/`.
 
 No **Wayland** o Shell só carrega código novo de extensão depois de um **logout/login**. Depois do login, ative a extensão:
 
 ```bash
-gnome-extensions enable wavebar@vinicius
+gnome-extensions enable wavebar-music@vinicius
 ```
 
-Preferências: app **Extensões** → Wavebar → ⚙, ou:
+Preferências: app **Extensões** → Wavebar Music → ⚙. A janela tem duas páginas: **Geral** (tema, Blur my Shell, cache) e **Sobre mim** (o autor e os outros projetos dele). Também abre com:
 
 ```bash
-gnome-extensions prefs wavebar@vinicius
+gnome-extensions prefs wavebar-music@vinicius
 ```
 
 ## Aparência
@@ -49,7 +51,7 @@ O ícone do painel herda a cor do texto do painel, então funciona também com o
 
 ## Particularidades dos players (tratadas)
 
-| Player | Comportamento | Como a Wavebar lida |
+| Player | Comportamento | Como a Wavebar Music lida |
 |---|---|---|
 | Spotify | Demora 1–2 s para atualizar status e posição. Às vezes manda `Metadata` vazio entre faixas. Não avisa (`Seeked`) quando "anterior" reinicia a faixa. | Play/pause e seek otimistas, o `Metadata` vazio é ignorado e a posição é relida após ⏮/⏭. |
 | Navegadores Chromium (Brave, Vivaldi, Chrome) | Sem `DesktopEntry`. Capa em arquivo temporário sem extensão. | O app é achado pelo processo (PID) ou pelo `StartupWMClass`. A capa carrega normalmente. |
@@ -96,7 +98,7 @@ Outras ferramentas, todas com a sessão aninhada rodando:
 | `scripts/nested-test.sh [ciclos]` | Testa robustez e vazamentos: ativar/desativar com o card aberto, timers, bloqueio de tela |
 | `scripts/nested-stop.sh` | Encerra a sessão aninhada e a ponte |
 
-`Eval` e `Screenshot` funcionam porque a extensão auxiliar `dev/wavebar-devtools@vinicius` liga o *unsafe mode*. Ela faz isso **só** quando `WAVEBAR_DEV=1`, variável que apenas o `dev-nested.sh` define, e nunca é publicada.
+`Eval` e `Screenshot` funcionam porque a extensão auxiliar `dev/wavebar-music-devtools@vinicius` liga o *unsafe mode*. Ela faz isso **só** quando `WAVEBAR_MUSIC_DEV=1`, variável que apenas o `dev-nested.sh` define, e nunca é publicada.
 
 Testes da lógica pura (parser LRC, limpeza de títulos, onda, cache), sem precisar do Shell:
 
@@ -108,8 +110,8 @@ gjs -m tests/run.js
 
 ```
 extension.js          monta/desmonta tudo (enable/disable)
-prefs.js              janela de preferências (GTK 4 + libadwaita)
-lib/mpris.js          players MPRIS via D-Bus (sem dependência do Shell)
+prefs.js              preferências: páginas "Geral" e "Sobre mim" (GTK 4 + libadwaita)
+lib/mpris.js          players MPRIS via D-Bus (sem dependência do Shell), repetição (LoopStatus)
 lib/appLookup.js      descobre o app (.desktop) de cada player
 lib/appearance.js     tema claro/escuro + integração com o Blur my Shell
 lib/panelIndicator.js botão do painel + ícone de equalizador (Cairo + Clutter.Timeline)
@@ -127,7 +129,7 @@ schemas/              configurações (GSettings)
 **Ver os logs**
 
 ```bash
-journalctl -f -o cat /usr/bin/gnome-shell | grep -i wavebar
+journalctl -f -o cat /usr/bin/gnome-shell | grep -i wavebar-music
 ```
 
 **O ícone não aparece.** Ele só aparece com um player *ativo*, ou seja, tocando, pausado ou com faixa carregada. Apps Electron (Deezer, YouTube Music) só publicam MPRIS depois que algo começa a tocar. Para ver o que está no D-Bus:
@@ -150,19 +152,19 @@ systemctl --user restart xdg-document-portal.service
 **A letra não aparece.** Nem toda música está no LRCLIB (é um banco colaborativo). Para forçar uma nova busca, use **Preferências → Limpar** ou:
 
 ```bash
-rm -rf ~/.cache/wavebar/lyrics
+rm -rf ~/.cache/wavebar-music/lyrics
 ```
 
 **A barra de progresso não deixa pular.** O player informou `CanSeek = false`, ou não informou a duração da faixa. Isso é comum em transmissões ao vivo.
 
 ## Privacidade
 
-- Para buscar letras, a Wavebar envia ao `lrclib.net` o **título, o artista, o álbum e a duração** da faixa que está tocando. Nada mais: o User-Agent é genérico (`Wavebar/0.1`).
+- Para buscar letras, a Wavebar Music envia ao `lrclib.net` o **título, o artista, o álbum e a duração** da faixa que está tocando. Nada mais: o User-Agent é genérico (`WavebarMusic/0.3`).
 - As capas vindas de `http(s)` são baixadas do endereço que o próprio player informou.
-- O cache fica em `~/.cache/wavebar/`, com no máximo 300 capas e 1000 letras.
+- O cache fica em `~/.cache/wavebar-music/`, com no máximo 300 capas e 1000 letras.
 
 ## Licença
 
 Copyright (C) 2026 Vinicius Bispo.
 
-A Wavebar é software livre: você pode redistribuí-la e/ou modificá-la sob os termos da **GNU General Public License**, versão 3 ou (a seu critério) qualquer versão posterior, publicada pela Free Software Foundation. Veja o arquivo [LICENSE](LICENSE).
+A Wavebar Music é software livre: você pode redistribuí-la e/ou modificá-la sob os termos da **GNU General Public License**, versão 3 ou (a seu critério) qualquer versão posterior, publicada pela Free Software Foundation. Veja o arquivo [LICENSE](LICENSE).
