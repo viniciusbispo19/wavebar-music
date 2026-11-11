@@ -6,7 +6,7 @@ Controle de mídia universal para o painel do GNOME Shell 51.
 - Ícone em forma de **pílula com 3 barrinhas** que animam enquanto algo toca. Ele só aparece quando há um player ativo.
 - **Clique esquerdo** no ícone: pausa o que estiver tocando, em qualquer player (se houver vários tocando, pausa todos). Se nada estiver tocando, retoma o último player usado.
 - **Clique direito** no ícone (ou Enter/Espaço com o ícone focado): abre o card com a capa, o título, o artista, o player, a **letra com rolagem automática**, a **onda de progresso** (clique ou arraste para pular) e os controles.
-- Botão **Repetir** no card, que alterna entre não repetir, repetir a lista e repetir a música. Ele aparece quando o player oferece essa opção: Spotify, Deezer e VLC têm; navegadores não.
+- Botões **Aleatório** (à esquerda) e **Repetir** (à direita) no card. O Repetir alterna entre não repetir, repetir a lista e repetir a música. Ligados, ficam na cor de destaque. Aparecem quando o player oferece a opção: Spotify, Deezer e VLC têm; navegadores não. Se o player só oferece um dos dois, o outro lado fica vazio para o play/pause continuar centralizado.
 - **Tema claro e escuro**, com integração ao **Blur my Shell**.
 - Com vários players, use as setas ao lado do nome do player para alternar. Clicar no nome traz a janela do player para a frente.
 
@@ -111,7 +111,7 @@ gjs -m tests/run.js
 ```
 extension.js          monta/desmonta tudo (enable/disable)
 prefs.js              preferências: páginas "Geral" e "Sobre mim" (GTK 4 + libadwaita)
-lib/mpris.js          players MPRIS via D-Bus (sem dependência do Shell), repetição (LoopStatus)
+lib/mpris.js          players MPRIS via D-Bus (sem dependência do Shell), repetição (LoopStatus) e aleatório (Shuffle)
 lib/appLookup.js      descobre o app (.desktop) de cada player
 lib/appearance.js     tema claro/escuro + integração com o Blur my Shell
 lib/panelIndicator.js botão do painel + ícone de equalizador (Cairo + Clutter.Timeline)
@@ -159,7 +159,7 @@ rm -rf ~/.cache/wavebar-music/lyrics
 
 ## Privacidade
 
-- Para buscar letras, a Wavebar Music envia ao `lrclib.net` o **título, o artista, o álbum e a duração** da faixa que está tocando. Nada mais: o User-Agent é genérico (`WavebarMusic/0.3`).
+- Para buscar letras, a Wavebar Music envia ao `lrclib.net` o **título, o artista, o álbum e a duração** da faixa que está tocando. Nada mais: o User-Agent é genérico (`WavebarMusic/0.4`).
 - As capas vindas de `http(s)` são baixadas do endereço que o próprio player informou.
 - O cache fica em `~/.cache/wavebar-music/`, com no máximo 300 capas e 1000 letras.
 

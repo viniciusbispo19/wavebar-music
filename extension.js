@@ -24,7 +24,7 @@ import {MprisManager} from './lib/mpris.js';
 import {WavebarMusicIndicator} from './lib/panelIndicator.js';
 
 // User-Agent genérico: identifica o app sem expor dados do usuário.
-const USER_AGENT = 'WavebarMusic/0.3 (GNOME Shell extension)';
+const USER_AGENT = 'WavebarMusic/0.4 (GNOME Shell extension)';
 
 export default class WavebarMusicExtension extends Extension {
     enable() {

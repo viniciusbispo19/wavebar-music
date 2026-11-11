@@ -339,26 +339,26 @@
     icon-size: 22px;
 }
 
-/* Repetir: apagado quando desligado, cor de destaque quando ligado. */
-.wavebar-music-control.wavebar-music-repeat {
-    width: 18px;   /* mesmo tamanho do espaço à esquerda (centraliza o play) */
+/* Aleatório e repetir: apagados quando desligados, cor de destaque quando ligados. */
+.wavebar-music-control.wavebar-music-toggle {
+    width: 18px;   /* mesmo tamanho dos dois lados (centraliza o play) */
     height: 18px;
     padding: 9px;
 }
 
-.wavebar-music-control.wavebar-music-repeat StIcon {
+.wavebar-music-control.wavebar-music-toggle StIcon {
     icon-size: 18px;
     color: rgba(255, 255, 255, 0.45);
 }
 
-.wavebar-music-control.wavebar-music-repeat:checked StIcon {
+.wavebar-music-control.wavebar-music-toggle:checked StIcon {
     color: -st-accent-color;
 }
 
-.wavebar-music-theme-light .wavebar-music-control.wavebar-music-repeat StIcon {
+.wavebar-music-theme-light .wavebar-music-control.wavebar-music-toggle StIcon {
     color: rgba(0, 0, 0, 0.4);
 }
 
-.wavebar-music-theme-light .wavebar-music-control.wavebar-music-repeat:checked StIcon {
+.wavebar-music-theme-light .wavebar-music-control.wavebar-music-toggle:checked StIcon {
     color: -st-accent-color;
 }

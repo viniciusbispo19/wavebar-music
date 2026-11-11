@@ -22,7 +22,7 @@ import GLib from 'gi://GLib';
 import System from 'system';
 
 // ---------- argumentos ----------
-const opts = {name: 'wavebar_music_fake', identity: 'Fake Player', desktopEntry: '', paused: false, track: 0, custom: {}};
+const opts = {name: 'wavebar_music_fake', identity: 'Fake Player', desktopEntry: '', paused: false, track: 0, custom: {}, shuffle: true};
 for (let i = 0; i < System.programArgs.length; i++) {
     const arg = System.programArgs[i];
     const next = () => System.programArgs[++i];
@@ -31,6 +31,7 @@ for (let i = 0; i < System.programArgs.length; i++) {
     else if (arg === '--desktop-entry') opts.desktopEntry = next();
     else if (arg === '--paused') opts.paused = true;
     else if (arg === '--track') opts.track = Number(next());
+    else if (arg === '--no-shuffle') opts.shuffle = false; // imita player sem "aleatório"
     // Faixa exata (para imitar o que um app real manda — ex.: dados do Deezer)
     else if (arg === '--title') opts.custom.title = next();
     else if (arg === '--artist') opts.custom.artist = [next()];
@@ -86,6 +87,7 @@ if (Object.keys(opts.custom).length > 0) {
 let index = Math.min(Math.max(opts.track, 0), TRACKS.length - 1);
 let status = opts.paused ? 'Paused' : 'Playing';
 let loopStatus = 'None';
+let shuffle = false;
 let basePos = 0; // µs
 let baseTime = GLib.get_monotonic_time();
 
@@ -136,6 +138,7 @@ const PLAYER_XML = `<node><interface name="org.mpris.MediaPlayer2.Player">
   <signal name="Seeked"><arg name="Position" type="x"/></signal>
   <property name="PlaybackStatus" type="s" access="read"/>
   <property name="LoopStatus" type="s" access="readwrite"/>
+  ${opts.shuffle ? '<property name="Shuffle" type="b" access="readwrite"/>' : ''}
   <property name="Rate" type="d" access="read"/>
   <property name="Metadata" type="a{sv}" access="read"/>
   <property name="Volume" type="d" access="read"/>
@@ -168,6 +171,7 @@ function notify(...props) {
         const value = {
             PlaybackStatus: new GLib.Variant('s', status),
             LoopStatus: new GLib.Variant('s', loopStatus),
+            Shuffle: new GLib.Variant('b', shuffle),
             Metadata: new GLib.Variant('a{sv}', metadata()),
         }[p];
         playerExport.emit_property_changed(p, value);
@@ -200,6 +204,14 @@ const player = {
         loopStatus = value;
         notify('LoopStatus');
         print(`↻ repetir: ${value}`);
+    },
+    get Shuffle() {
+        return shuffle;
+    },
+    set Shuffle(value) {
+        shuffle = value;
+        notify('Shuffle');
+        print(`⤨ aleatório: ${value ? 'ligado' : 'desligado'}`);
     },
     get Metadata() {
         return metadata();
