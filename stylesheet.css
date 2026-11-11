@@ -127,3 +127,61 @@
 .wavebar-switch StIcon {
     icon-size: 14px;
 }
+
+/* ---------- Onda de progresso ---------- */
+
+.wavebar-progress {
+    spacing: 4px;
+    padding-top: 2px;
+}
+
+.wavebar-waveform {
+    height: 36px;
+    color: -st-accent-color;                          /* parte já tocada */
+    -wavebar-rest-color: rgba(255, 255, 255, 0.22);   /* parte restante */
+}
+
+.wavebar-waveform:hover {
+    -wavebar-rest-color: rgba(255, 255, 255, 0.32);
+}
+
+.wavebar-waveform:insensitive {
+    color: rgba(255, 255, 255, 0.45);
+}
+
+.wavebar-time {
+    font-size: 0.8em;
+    font-feature-settings: "tnum";
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* ---------- Controles ---------- */
+
+.wavebar-controls {
+    spacing: 18px;
+    padding-top: 2px;
+}
+
+.wavebar-control {
+    padding: 10px;
+}
+
+.wavebar-control StIcon {
+    icon-size: 20px;
+}
+
+.wavebar-control.wavebar-play {
+    padding: 14px;
+    background-color: #ffffff;
+    color: #1c1c20;
+}
+
+.wavebar-control.wavebar-play:hover,
+.wavebar-control.wavebar-play:focus {
+    background-color: rgba(255, 255, 255, 0.88);
+    color: #1c1c20;
+}
+
+.wavebar-control.wavebar-play StIcon {
+    icon-size: 22px;
+}
