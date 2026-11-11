@@ -1,0 +1,9 @@
+{
+  "uuid": "wavebar-devtools@vinicius",
+  "name": "Wavebar — ferramentas de desenvolvimento",
+  "description": "Uso interno do desenvolvimento da Wavebar. Liga o modo inseguro do Shell APENAS na sessão aninhada de testes (variável WAVEBAR_DEV=1). Não faz nada na sessão normal.",
+  "shell-version": [
+    "51"
+  ],
+  "url": "https://github.com/viniciusbispo19/wavebar-music"
+}

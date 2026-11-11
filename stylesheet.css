@@ -1,0 +1,25 @@
+/* Wavebar — todas as classes usam o prefixo .wavebar- para não vazar no tema. */
+
+/* ---------- Botão do painel ---------- */
+
+.wavebar-pill {
+    border-radius: 999px;
+    padding: 4px 9px;
+    /* Cor de destaque do sistema, translúcida */
+    background-color: st-transparentize(-st-accent-color, 0.45);
+    transition-duration: 200ms;
+}
+
+.wavebar-pill.wavebar-paused {
+    background-color: rgba(255, 255, 255, 0.14);
+}
+
+.wavebar-equalizer {
+    width: 13px;
+    height: 12px;
+    color: #ffffff;
+}
+
+.wavebar-paused .wavebar-equalizer {
+    color: rgba(255, 255, 255, 0.75);
+}

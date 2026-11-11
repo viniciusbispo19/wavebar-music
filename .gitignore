@@ -1,0 +1,8 @@
+# Gerados pelo build — nunca versionar
+build/
+*.zip
+
+# Logs e lixo de editor
+*.log
+.vscode/
+*.swp
