@@ -9,19 +9,26 @@
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import {Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
 
+import {MprisManager} from './lib/mpris.js';
 import {WavebarIndicator} from './lib/panelIndicator.js';
 
 export default class WavebarExtension extends Extension {
     enable() {
         // Nada é criado no construtor: as regras do extensions.gnome.org
         // exigem que tudo nasça no enable() e morra no disable().
-        this._indicator = new WavebarIndicator();
+        this._manager = new MprisManager();
+        this._indicator = new WavebarIndicator(this._manager);
         Main.panel.addToStatusArea(this.uuid, this._indicator);
+        this._manager.start();
     }
 
     disable() {
         // destroy() no indicador também destrói o menu e remove do painel.
         this._indicator?.destroy();
         this._indicator = null;
+
+        // Depois do indicador: ele desconecta seus sinais do manager.
+        this._manager?.destroy();
+        this._manager = null;
     }
 }
