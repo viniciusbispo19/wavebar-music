@@ -5,6 +5,7 @@
 import System from 'system';
 
 import {formatTime, generateWaveform, hashString} from '../lib/util.js';
+import * as lrcTests from './lrcTests.js';
 
 let failures = 0, passed = 0;
 
@@ -57,6 +58,8 @@ test('formatTime', () => {
     assertEqual(formatTime(-1), '0:00');
     assertEqual(formatTime(NaN), '0:00');
 });
+
+lrcTests.register({test, assert, assertEqual});
 
 print(`${passed} ok, ${failures} falha(s)`);
 System.exit(failures ? 1 : 0);

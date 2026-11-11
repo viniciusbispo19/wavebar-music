@@ -6,6 +6,7 @@
 //   panelIndicator.js → botão do painel (pílula com barrinhas)
 //   playerCard.js     → card vertical aberto pelo botão
 //   coverArt.js       → capas (file://, data:, http) com cache em disco
+//   lyrics.js / lrc.js → letras do LRCLIB (sincronizadas ou não)
 
 import GLib from 'gi://GLib';
 import Soup from 'gi://Soup?version=3.0';
@@ -14,6 +15,7 @@ import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import {Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
 
 import {CoverArtLoader} from './lib/coverArt.js';
+import {LyricsClient} from './lib/lyrics.js';
 import {MprisManager} from './lib/mpris.js';
 import {WavebarIndicator} from './lib/panelIndicator.js';
 
@@ -30,6 +32,7 @@ export default class WavebarExtension extends Extension {
         this._session = new Soup.Session({user_agent: USER_AGENT, timeout: 15});
         this._services = {
             covers: new CoverArtLoader(this._session, cacheDir),
+            lyrics: new LyricsClient(this._session, cacheDir),
         };
 
         this._manager = new MprisManager();
@@ -49,6 +52,7 @@ export default class WavebarExtension extends Extension {
         this._manager = null;
 
         this._services?.covers.destroy();
+        this._services?.lyrics.destroy();
         this._services = null;
 
         // Corta qualquer requisição HTTP que ainda esteja no ar.

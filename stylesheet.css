@@ -185,3 +185,35 @@
 .wavebar-control.wavebar-play StIcon {
     icon-size: 22px;
 }
+
+/* ---------- Letras ---------- */
+
+.wavebar-lyrics {
+    height: 120px;
+    -st-vfade-offset: 28px;   /* esmaece o topo e a base da rolagem */
+}
+
+.wavebar-lyrics-box {
+    spacing: 6px;
+    padding: 4px 4px 32px;
+}
+
+.wavebar-lyric-line {
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.35);
+}
+
+.wavebar-lyric-line.wavebar-active {
+    color: #ffffff;
+}
+
+.wavebar-lyric-plain {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.wavebar-lyrics-status {
+    padding: 14px 8px;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.5);
+    font-style: italic;
+}

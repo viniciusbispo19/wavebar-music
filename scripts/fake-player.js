@@ -62,7 +62,8 @@ const TRACKS = [
         length: 213, art: 'https://picsum.photos/seed/wavebar/400'},
     {title: 'Faixa Que Não Existe', artist: ['Wavebar Teste'], album: 'Sem Letra',
         length: 95, art: dataUri},
-    {title: 'Sem Capa', artist: ['Ninguém'], album: '', length: 0, art: ''},
+    // Instrumental no LRCLIB e sem capa (testa o placeholder).
+    {title: 'Time', artist: ['Hans Zimmer'], album: 'Inception', length: 276, art: ''},
 ];
 
 // ---------- estado ----------
