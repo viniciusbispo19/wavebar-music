@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2026 Vinicius Bispo
 # Empacota e instala a extensão em ~/.local/share/gnome-shell/extensions/.
 #
 # Por que não um link simbólico para a pasta do projeto? Um

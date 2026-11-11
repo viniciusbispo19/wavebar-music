@@ -1,10 +1,11 @@
 {
   "name": "Wavebar",
-  "description": "Controle de mídia universal para o painel do GNOME.\n\n• Funciona com qualquer player MPRIS (Spotify, Firefox, Chrome, VLC, mpv, Rhythmbox…)\n• Ícone de equalizador animado que só aparece quando há algo tocando\n• Card com capa, letra sincronizada e barra de progresso em forma de onda\n\nAs letras das músicas vêm do lrclib.net.",
+  "description": "Controle de mídia universal para o painel do GNOME.\n\n• Funciona com qualquer player MPRIS: Spotify, Deezer, YouTube Music, Firefox, Brave, Vivaldi, Chrome, VLC…\n• Ícone de equalizador animado que só aparece quando há algo tocando\n• Card com capa, letra com rolagem automática e barra de progresso em forma de onda\n• Tema claro/escuro e integração com o Blur my Shell\n\nAs letras das músicas vêm do lrclib.net.",
   "uuid": "wavebar@vinicius",
   "shell-version": [
     "51"
   ],
   "url": "https://github.com/viniciusbispo19/wavebar-music",
-  "version-name": "0.1.0"
+  "version-name": "0.2.0",
+  "settings-schema": "org.gnome.shell.extensions.wavebar"
 }

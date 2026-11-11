@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2026 Vinicius Bispo
 # Gera o pacote .zip da extensão em build/ com a ferramenta OFICIAL
 # (`gnome-extensions pack`) — o mesmo formato aceito pelo extensions.gnome.org.
 #
-# O pack inclui sozinho: metadata.json, extension.js e stylesheet.css.
+# O pack inclui sozinho: metadata.json, extension.js, prefs.js e stylesheet.css.
 # Todo o resto precisa ser listado com --extra-source.
 
 set -euo pipefail
@@ -12,5 +14,7 @@ mkdir -p build
 gnome-extensions pack --force --out-dir=build \
     --extra-source=lib \
     --extra-source=README.md \
+    --extra-source=LICENSE \
+    --schema=schemas/org.gnome.shell.extensions.wavebar.gschema.xml \
     .
 echo "Pacote: build/wavebar@vinicius.shell-extension.zip"

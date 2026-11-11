@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2026 Vinicius Bispo
 # Executa JavaScript DENTRO do Shell aninhado (precisa do dev-nested.sh rodando).
 # Exemplo: ./scripts/nested-eval.sh 'Main.panel.statusArea["wavebar@vinicius"].visible'
 # Resposta: (true, '<JSON>') ou (false, '<erro>').

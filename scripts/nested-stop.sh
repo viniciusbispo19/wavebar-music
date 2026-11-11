@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2026 Vinicius Bispo
 # Encerra o Shell aninhado aberto pelo dev-nested.sh.
 # Procura só processos chamados exatamente "gnome-shell" com --devkit ou
 # --headless nos argumentos — nunca o Shell da sua sessão real.
@@ -16,3 +18,7 @@ for pid in $(pgrep -x gnome-shell); do
     fi
 done
 rm -f "$BUS_FILE"
+
+# A ponte MPRIS (scripts/mpris-bridge.js) fica presa ao barramento antigo:
+# encerramos também. ("[m]pris" evita o pkill casar com o próprio comando.)
+pkill -f "[m]pris-bridge.js" && echo "Ponte MPRIS encerrada." || true

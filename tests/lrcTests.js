@@ -1,5 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-import {cleanTitle, findLineIndex, parseLrc, pickBestResult, toLyrics} from '../lib/lrc.js';
+// Copyright (C) 2026 Vinicius Bispo
+import {
+    cleanArtist, cleanTitle, findLineIndex, forceSplitArtistTitle, parseLrc, pickBestResult,
+    splitArtistTitle, toLyrics,
+} from '../lib/lrc.js';
 
 export function register({test, assert, assertEqual}) {
     test('parseLrc: formatos de tempo e ordenação', () => {
@@ -39,16 +43,58 @@ export function register({test, assert, assertEqual}) {
         assertEqual(cleanTitle('Song - 2011 Remaster'), 'Song');
         assertEqual(cleanTitle('Song (Live at Wembley)'), 'Song (Live at Wembley)');
         assertEqual(cleanTitle('Canção (Clipe Oficial)'), 'Canção');
+        assertEqual(cleanTitle('a-ha - Take On Me (Vídeo oficial)'), 'a-ha - Take On Me');
+        assertEqual(cleanTitle('Rick Astley - Never Gonna Give You Up (Official Video) (4K Remaster)'),
+            'Rick Astley - Never Gonna Give You Up');
+        assertEqual(cleanTitle('Música (Áudio Oficial)'), 'Música');
+        assertEqual(cleanTitle('Hold (Vidas)'), 'Hold (Vidas)'); // "vidas" não é "vídeo"
     });
 
-    test('pickBestResult: respeita duração e prefere sincronizada', () => {
+    test('cleanArtist', () => {
+        assertEqual(cleanArtist('QueenVEVO'), 'Queen');
+        assertEqual(cleanArtist('Queen - Topic'), 'Queen');
+        assertEqual(cleanArtist('Queen Official'), 'Queen');
+        assertEqual(cleanArtist('Hillsong Music'), 'Hillsong Music');
+    });
+
+    test('splitArtistTitle', () => {
+        assertEqual(splitArtistTitle('a-ha - Take On Me (Vídeo oficial)', 'a-ha'),
+            {title: 'Take On Me', artist: 'a-ha'});
+        assertEqual(splitArtistTitle('Queen - Bohemian Rhapsody (Official Video)', 'Queen Official'),
+            {title: 'Bohemian Rhapsody', artist: 'Queen'});
+        assertEqual(splitArtistTitle('Artista - Música', ''), {title: 'Música', artist: 'Artista'});
+        // Player de verdade com traço no título: não mexe.
+        assertEqual(splitArtistTitle('Oceans - Ao Vivo', 'Hillsong United'),
+            {title: 'Oceans - Ao Vivo', artist: 'Hillsong United'});
+        assertEqual(splitArtistTitle('Deus Fiel', 'Gateway Worship Português'),
+            {title: 'Deus Fiel', artist: 'Gateway Worship Português'});
+    });
+
+    test('forceSplitArtistTitle', () => {
+        assertEqual(forceSplitArtistTitle('Tears For Fears - Everybody Wants To Rule The World (Loop y Extendido)'),
+            {artist: 'Tears For Fears', title: 'Everybody Wants To Rule The World'});
+        assertEqual(forceSplitArtistTitle('Sem traço'), null);
+    });
+
+    test('pickBestResult aceita trackName com "Artista - " na frente', () => {
+        const r = pickBestResult([{trackName: 'Tears For Fears - Everybody Wants To Rule The World',
+            artistName: 'Tears For Fears', duration: 252, syncedLyrics: '[00:01]x'}],
+        {title: 'Everybody Wants To Rule The World', artist: 'Tears For Fears', durationS: 1046});
+        assertEqual(r.durationMatch, false);
+    });
+
+    test('pickBestResult: duração certa ganha; só duração errada → durationMatch=false', () => {
         const results = [
             {trackName: 'Song', artistName: 'Band', duration: 300, plainLyrics: 'x'},
             {trackName: 'Song', artistName: 'Band', duration: 201, plainLyrics: 'x'},
             {trackName: 'Song', artistName: 'Band', duration: 200, syncedLyrics: '[00:01]x', plainLyrics: 'x'},
+            {trackName: 'Outra', artistName: 'Band', duration: 200, syncedLyrics: '[00:01]x'},
         ];
-        assertEqual(pickBestResult(results, {title: 'Song', artist: 'Band', durationS: 200}).duration, 200);
-        assertEqual(pickBestResult(results, {title: 'Song', artist: 'Band', durationS: 500}), null);
+        const ok = pickBestResult(results, {title: 'Song', artist: 'Band', durationS: 200});
+        assertEqual([ok.record.duration, ok.durationMatch], [200, true]);
+        const loose = pickBestResult(results, {title: 'Song', artist: 'Band', durationS: 244});
+        assertEqual(loose.durationMatch, false);
+        assertEqual(pickBestResult(results, {title: 'Nada', artist: 'Band', durationS: 200}), null);
         assertEqual(pickBestResult([], {title: 'x'}), null);
         assertEqual(pickBestResult(null, {title: 'x'}), null);
     });
@@ -57,6 +103,8 @@ export function register({test, assert, assertEqual}) {
         assertEqual(toLyrics({syncedLyrics: '[00:01]a'}).kind, 'synced');
         assertEqual(toLyrics({syncedLyrics: '', plainLyrics: ' a '}), {kind: 'plain', text: 'a'});
         assertEqual(toLyrics({instrumental: true}), {kind: 'instrumental'});
+        assertEqual(toLyrics({syncedLyrics: '[00:01]a\n[00:02]b', plainLyrics: ''}, {allowSynced: false}),
+            {kind: 'plain', text: 'a\nb'});
         assertEqual(toLyrics({}), null);
         assert(toLyrics(null) === null, 'null');
     });

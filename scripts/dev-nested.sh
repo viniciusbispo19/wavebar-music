@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2026 Vinicius Bispo
 # Abre um GNOME Shell 51 "aninhado" (numa janela do mutter-devkit), já com a
 # Wavebar instalada e ativada.
 #

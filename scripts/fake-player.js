@@ -1,5 +1,6 @@
 #!/usr/bin/env -S gjs -m
 // SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Vinicius Bispo
 // Player MPRIS FALSO, só para testes. Na sessão aninhada (D-Bus separado)
 // os players da sua sessão real não aparecem, então simulamos um.
 //
@@ -7,6 +8,9 @@
 //   ./scripts/nested-run.sh gjs -m scripts/fake-player.js
 //   ./scripts/nested-run.sh gjs -m scripts/fake-player.js --name vlc --identity VLC \
 //       --desktop-entry vlc --paused --track 2
+//   ./scripts/nested-run.sh gjs -m scripts/fake-player.js --name deezer --identity Deezer \
+//       --desktop-entry deezer-desktop --title 'No Role Modelz' --artist 'J. Cole' \
+//       --album '2014 Forest Hills Drive' --length 292 --art https://…/500x500.jpg
 //
 // Controle pelo terminal (exemplos):
 //   ./scripts/nested-run.sh gdbus call --session -d org.mpris.MediaPlayer2.wavebar_fake \
@@ -18,7 +22,7 @@ import GLib from 'gi://GLib';
 import System from 'system';
 
 // ---------- argumentos ----------
-const opts = {name: 'wavebar_fake', identity: 'Fake Player', desktopEntry: '', paused: false, track: 0};
+const opts = {name: 'wavebar_fake', identity: 'Fake Player', desktopEntry: '', paused: false, track: 0, custom: {}};
 for (let i = 0; i < System.programArgs.length; i++) {
     const arg = System.programArgs[i];
     const next = () => System.programArgs[++i];
@@ -27,6 +31,12 @@ for (let i = 0; i < System.programArgs.length; i++) {
     else if (arg === '--desktop-entry') opts.desktopEntry = next();
     else if (arg === '--paused') opts.paused = true;
     else if (arg === '--track') opts.track = Number(next());
+    // Faixa exata (para imitar o que um app real manda — ex.: dados do Deezer)
+    else if (arg === '--title') opts.custom.title = next();
+    else if (arg === '--artist') opts.custom.artist = [next()];
+    else if (arg === '--album') opts.custom.album = next();
+    else if (arg === '--length') opts.custom.length = Number(next());
+    else if (arg === '--art') opts.custom.art = next();
 }
 
 // ---------- capas geradas (file:// e data:) ----------
@@ -65,6 +75,12 @@ const TRACKS = [
     // Instrumental no LRCLIB e sem capa (testa o placeholder).
     {title: 'Time', artist: ['Hans Zimmer'], album: 'Inception', length: 276, art: ''},
 ];
+
+// --title/--artist/... substituem a faixa escolhida por --track.
+if (Object.keys(opts.custom).length > 0) {
+    const i = Math.min(Math.max(opts.track, 0), TRACKS.length - 1);
+    TRACKS[i] = {title: '', artist: [], album: '', length: 0, art: '', ...TRACKS[i], ...opts.custom};
+}
 
 // ---------- estado ----------
 let index = Math.min(Math.max(opts.track, 0), TRACKS.length - 1);

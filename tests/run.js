@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Vinicius Bispo
 // Testes das partes puras (sem Shell). Rodar a partir da raiz do projeto:
 //   gjs -m tests/run.js
 

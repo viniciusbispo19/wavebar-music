@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<!-- Copyright (C) 2026 Vinicius Bispo -->
+<schemalist>
+  <schema id="org.gnome.shell.extensions.wavebar" path="/org/gnome/shell/extensions/wavebar/">
+    <key name="theme" type="s">
+      <choices>
+        <choice value="auto"/>
+        <choice value="dark"/>
+        <choice value="light"/>
+      </choices>
+      <default>'auto'</default>
+      <summary>Tema do card</summary>
+      <description>auto: segue o Blur my Shell (se ativo) ou o tema do GNOME; dark: escuro; light: claro.</description>
+    </key>
+    <key name="follow-blur-my-shell" type="b">
+      <default>true</default>
+      <summary>Integrar com o Blur my Shell</summary>
+      <description>Usa o fundo desfocado, o estilo (claro/escuro) e o raio dos cantos configurados no Blur my Shell para menus.</description>
+    </key>
+  </schema>
+</schemalist>

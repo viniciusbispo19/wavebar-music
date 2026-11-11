@@ -1,4 +1,11 @@
-/* Wavebar — todas as classes usam o prefixo .wavebar- para não vazar no tema. */
+/* SPDX-License-Identifier: GPL-3.0-or-later
+ * Copyright (C) 2026 Vinicius Bispo
+ *
+ * Wavebar — todas as classes usam o prefixo .wavebar- para não vazar no tema.
+ *
+ * Temas: as cores do tema ESCURO são o padrão; o CLARO sobrescreve dentro de
+ * .wavebar-theme-light (classe posta no fundo do menu pelo panelIndicator.js).
+ */
 
 /* ---------- Botão do painel ---------- */
 
@@ -11,27 +18,54 @@
 }
 
 .wavebar-pill.wavebar-paused {
-    background-color: rgba(255, 255, 255, 0.14);
+    /* Cinza neutro: funciona no painel escuro e no transparente do Blur my Shell */
+    background-color: rgba(127, 127, 127, 0.28);
 }
 
+/* A cor das barrinhas é herdada do texto do painel (ex.: o Blur my Shell
+   pode deixar o painel transparente com texto claro ou escuro). */
 .wavebar-equalizer {
     width: 13px;
     height: 12px;
-    color: #ffffff;
 }
 
 .wavebar-paused .wavebar-equalizer {
-    color: rgba(255, 255, 255, 0.75);
+    opacity: 0.8;
 }
 
-/* ---------- Popup / card ---------- */
+/* ---------- Fundo do card ----------
+ * Três situações:
+ *  1. Blur my Shell ativo + tema automático: o fundo é o do BMS (não pintamos).
+ *  2. Tema escolhido (ou sem BMS): pintamos o fundo. O BMS usa !important;
+ *     usamos também, e os nossos seletores (3–4 classes) são mais
+ *     específicos que os dele (2), então vencem quando o tema é forçado.
+ *  3. Com desfoque por trás (.wavebar-over-blur), o nosso fundo fica translúcido.
+ */
 
 .wavebar-menu-content {
     padding: 14px;
     border-radius: 26px;
-    background-color: rgba(28, 28, 32, 0.92);
+}
+
+.popup-menu-content.wavebar-menu-content.wavebar-bg-dark {
+    background-color: rgba(28, 28, 32, 0.95) !important;
     border: 1px solid rgba(255, 255, 255, 0.08);
 }
+
+.popup-menu-content.wavebar-menu-content.wavebar-bg-light {
+    background-color: rgba(250, 250, 252, 0.96) !important;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.popup-menu-content.wavebar-menu-content.wavebar-bg-dark.wavebar-over-blur {
+    background-color: rgba(18, 18, 22, 0.5) !important;
+}
+
+.popup-menu-content.wavebar-menu-content.wavebar-bg-light.wavebar-over-blur {
+    background-color: rgba(255, 255, 255, 0.55) !important;
+}
+
+/* ---------- Card ---------- */
 
 .wavebar-card {
     width: 300px;
@@ -39,10 +73,14 @@
     color: #ffffff;
 }
 
+.wavebar-theme-light .wavebar-card {
+    color: #1c1c20;
+}
+
 .wavebar-cover {
     width: 300px;
     height: 300px;
-    border-radius: 18px;
+    border-radius: 12px; /* o card ajusta para ficar concêntrico com o menu */
     background-size: cover;
 }
 
@@ -50,12 +88,16 @@
 .wavebar-cover.wavebar-no-cover {
     background-gradient-direction: vertical;
     background-gradient-start: st-transparentize(-st-accent-color, 0.35);
-    background-gradient-end: rgba(255, 255, 255, 0.04);
+    background-gradient-end: rgba(127, 127, 127, 0.08);
 }
 
 .wavebar-cover-placeholder {
     icon-size: 96px;
-    color: rgba(255, 255, 255, 0.55);
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.wavebar-theme-light .wavebar-cover-placeholder {
+    color: rgba(255, 255, 255, 0.9);
 }
 
 .wavebar-info {
@@ -70,6 +112,10 @@
 
 .wavebar-artist {
     color: rgba(255, 255, 255, 0.7);
+}
+
+.wavebar-theme-light .wavebar-artist {
+    color: rgba(0, 0, 0, 0.6);
 }
 
 /* Linha do player: ‹  [ícone] Spotify  1/2  › */
@@ -90,6 +136,16 @@
     color: #ffffff;
 }
 
+.wavebar-theme-light .wavebar-app-button {
+    color: rgba(0, 0, 0, 0.7);
+}
+
+.wavebar-theme-light .wavebar-app-button:hover,
+.wavebar-theme-light .wavebar-app-button:focus {
+    background-color: rgba(0, 0, 0, 0.06);
+    color: #1c1c20;
+}
+
 .wavebar-app-button StBoxLayout {
     spacing: 6px;
 }
@@ -102,6 +158,10 @@
     font-size: 0.8em;
     font-feature-settings: "tnum";
     color: rgba(255, 255, 255, 0.45);
+}
+
+.wavebar-theme-light .wavebar-player-count {
+    color: rgba(0, 0, 0, 0.45);
 }
 
 .wavebar-icon-button {
@@ -124,66 +184,26 @@
     color: rgba(255, 255, 255, 0.3);
 }
 
+.wavebar-theme-light .wavebar-icon-button {
+    color: rgba(0, 0, 0, 0.75);
+}
+
+.wavebar-theme-light .wavebar-icon-button:hover,
+.wavebar-theme-light .wavebar-icon-button:focus {
+    background-color: rgba(0, 0, 0, 0.07);
+    color: #1c1c20;
+}
+
+.wavebar-theme-light .wavebar-icon-button:active {
+    background-color: rgba(0, 0, 0, 0.13);
+}
+
+.wavebar-theme-light .wavebar-icon-button:insensitive {
+    color: rgba(0, 0, 0, 0.3);
+}
+
 .wavebar-switch StIcon {
     icon-size: 14px;
-}
-
-/* ---------- Onda de progresso ---------- */
-
-.wavebar-progress {
-    spacing: 4px;
-    padding-top: 2px;
-}
-
-.wavebar-waveform {
-    height: 36px;
-    color: -st-accent-color;                          /* parte já tocada */
-    -wavebar-rest-color: rgba(255, 255, 255, 0.22);   /* parte restante */
-}
-
-.wavebar-waveform:hover {
-    -wavebar-rest-color: rgba(255, 255, 255, 0.32);
-}
-
-.wavebar-waveform:insensitive {
-    color: rgba(255, 255, 255, 0.45);
-}
-
-.wavebar-time {
-    font-size: 0.8em;
-    font-feature-settings: "tnum";
-    color: rgba(255, 255, 255, 0.6);
-}
-
-/* ---------- Controles ---------- */
-
-.wavebar-controls {
-    spacing: 18px;
-    padding-top: 2px;
-}
-
-.wavebar-control {
-    padding: 10px;
-}
-
-.wavebar-control StIcon {
-    icon-size: 20px;
-}
-
-.wavebar-control.wavebar-play {
-    padding: 14px;
-    background-color: #ffffff;
-    color: #1c1c20;
-}
-
-.wavebar-control.wavebar-play:hover,
-.wavebar-control.wavebar-play:focus {
-    background-color: rgba(255, 255, 255, 0.88);
-    color: #1c1c20;
-}
-
-.wavebar-control.wavebar-play StIcon {
-    icon-size: 22px;
 }
 
 /* ---------- Letras ---------- */
@@ -216,4 +236,105 @@
     text-align: center;
     color: rgba(255, 255, 255, 0.5);
     font-style: italic;
+}
+
+.wavebar-theme-light .wavebar-lyric-line {
+    color: rgba(0, 0, 0, 0.32);
+}
+
+.wavebar-theme-light .wavebar-lyric-line.wavebar-active {
+    color: #1c1c20;
+}
+
+.wavebar-theme-light .wavebar-lyric-plain {
+    color: rgba(0, 0, 0, 0.78);
+}
+
+.wavebar-theme-light .wavebar-lyrics-status {
+    color: rgba(0, 0, 0, 0.5);
+}
+
+/* ---------- Onda de progresso ---------- */
+
+.wavebar-progress {
+    spacing: 4px;
+    padding-top: 2px;
+}
+
+.wavebar-waveform {
+    height: 36px;
+    color: -st-accent-color;                          /* parte já tocada */
+    -wavebar-rest-color: rgba(255, 255, 255, 0.22);   /* parte restante */
+}
+
+.wavebar-waveform:hover {
+    -wavebar-rest-color: rgba(255, 255, 255, 0.32);
+}
+
+.wavebar-waveform:insensitive {
+    color: rgba(255, 255, 255, 0.45);
+}
+
+.wavebar-theme-light .wavebar-waveform {
+    -wavebar-rest-color: rgba(0, 0, 0, 0.16);
+}
+
+.wavebar-theme-light .wavebar-waveform:hover {
+    -wavebar-rest-color: rgba(0, 0, 0, 0.26);
+}
+
+.wavebar-theme-light .wavebar-waveform:insensitive {
+    color: rgba(0, 0, 0, 0.4);
+}
+
+.wavebar-time {
+    font-size: 0.8em;
+    font-feature-settings: "tnum";
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.wavebar-theme-light .wavebar-time {
+    color: rgba(0, 0, 0, 0.55);
+}
+
+/* ---------- Controles ---------- */
+
+.wavebar-controls {
+    spacing: 18px;
+    padding-top: 2px;
+}
+
+.wavebar-control {
+    padding: 10px;
+}
+
+.wavebar-control StIcon {
+    icon-size: 20px;
+}
+
+.wavebar-control.wavebar-play {
+    padding: 14px;
+    background-color: #ffffff;
+    color: #1c1c20;
+}
+
+.wavebar-control.wavebar-play:hover,
+.wavebar-control.wavebar-play:focus {
+    background-color: rgba(255, 255, 255, 0.88);
+    color: #1c1c20;
+}
+
+.wavebar-theme-light .wavebar-control.wavebar-play {
+    background-color: #1c1c20;
+    color: #ffffff;
+}
+
+.wavebar-theme-light .wavebar-control.wavebar-play:hover,
+.wavebar-theme-light .wavebar-control.wavebar-play:focus {
+    background-color: rgba(28, 28, 32, 0.85);
+    color: #ffffff;
+}
+
+.wavebar-control.wavebar-play StIcon {
+    icon-size: 22px;
 }

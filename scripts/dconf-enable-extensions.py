@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2026 Vinicius Bispo
 """Ativa extensões no dconf em uso (respeita DCONF_PROFILE).
 
 Uso interno do scripts/dev-nested.sh: roda DENTRO do barramento da sessão
