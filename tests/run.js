@@ -5,6 +5,7 @@
 import System from 'system';
 
 import {formatTime, generateWaveform, hashString} from '../lib/util.js';
+import {LruMap} from '../lib/cache.js';
 import * as lrcTests from './lrcTests.js';
 
 let failures = 0, passed = 0;
@@ -57,6 +58,16 @@ test('formatTime', () => {
     assertEqual(formatTime(3725e6), '1:02:05');
     assertEqual(formatTime(-1), '0:00');
     assertEqual(formatTime(NaN), '0:00');
+});
+
+test('LruMap descarta o item usado há mais tempo', () => {
+    const m = new LruMap(2);
+    m.set('a', 1);
+    m.set('b', 2);
+    m.get('a');      // 'a' vira o mais recente
+    m.set('c', 3);   // estoura o limite: sai 'b'
+    assert(m.has('a') && m.has('c') && !m.has('b'), 'item errado descartado');
+    assertEqual(m.size, 2);
 });
 
 lrcTests.register({test, assert, assertEqual});
